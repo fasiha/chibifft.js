@@ -1,0 +1,15 @@
+{
+  "name": "chibifft",
+  "version": "1.0.0",
+  "description": "Little FFT toys",
+  "main": "index.js",
+  "scripts": {
+    "test": "tape test.js"
+  },
+  "keywords": [],
+  "author": "Ahmed Fasih",
+  "license": "Unlicense",
+  "devDependencies": {
+    "tape": "^4.9.1"
+  }
+}
