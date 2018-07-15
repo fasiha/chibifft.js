@@ -27,11 +27,11 @@ function fftComplexInterleaved(x, start = 0, n = (x.length / 2)) {
       let e = cget(x, i + start);
       let o = cget(x, i + nhalf + start);
       let phase = -2 * Math.PI * i / n;
-      let w = [Math.cos(phase), Math.sin(phase)];
-      let left = cadd(...e, ...cmul(...w, ...o));
-      cset(x, i + start, ...left);
-      let right = csub(...e, ...cmul(...w, ...o));
-      cset(x, i + start + nhalf, ...right);
+      let wo = cmul(Math.cos(phase), Math.sin(phase), ...o);
+      let res = cadd(...e, ...wo);
+      cset(x, i + start, ...res);
+      res = csub(...e, ...wo);
+      cset(x, i + start + nhalf, ...res);
     }
   }
 }
