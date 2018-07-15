@@ -1,20 +1,12 @@
 'use strict';
-
-function cmul(a, b, x, y) { return [a * x - b * y, a * y + b * x]; }
-function cadd(a, b, x, y) { return [a + x, b + y] };
-function csub(a, b, x, y) { return [a - x, b - y] };
-function cget(v, n) { return v.slice(2 * n, 2 * n + 2); }
-function cset(v, n, a, b) {
-  v[2 * n] = a;
-  v[2 * n + 1] = b;
-}
+let cx = require('./complex');
 
 function separateComplexInterleaved(a, start, n) {
   let nhalf = n / 2;
   let b = Array(2 * nhalf);
-  for (let i = 0; i < nhalf; i++) cset(b, i, ...cget(a, start + 2 * i + 1));
-  for (let i = 0; i < nhalf; i++) cset(a, start + i, ...cget(a, start + 2 * i));
-  for (let i = 0; i < nhalf; i++) cset(a, start + i + nhalf, ...cget(b, i));
+  for (let i = 0; i < nhalf; i++) cx.set(b, i, ...cx.get(a, start + 2 * i + 1));
+  for (let i = 0; i < nhalf; i++) cx.set(a, start + i, ...cx.get(a, start + 2 * i));
+  for (let i = 0; i < nhalf; i++) cx.set(a, start + i + nhalf, ...cx.get(b, i));
 }
 
 function fftComplexInterleaved(x, start = 0, n = (x.length / 2)) {
@@ -24,23 +16,17 @@ function fftComplexInterleaved(x, start = 0, n = (x.length / 2)) {
     fftComplexInterleaved(x, start + n / 2, n / 2);
     let nhalf = n / 2;
     for (let i = 0; i < nhalf; i++) {
-      let e = cget(x, i + start);
-      let o = cget(x, i + nhalf + start);
-      let phase = -2 * Math.PI * i / n;
-      let wo = cmul(Math.cos(phase), Math.sin(phase), ...o);
-      let res = cadd(...e, ...wo);
-      cset(x, i + start, ...res);
-      res = csub(...e, ...wo);
-      cset(x, i + start + nhalf, ...res);
+      let e = cx.get(x, i + start);
+      let o = cx.get(x, i + nhalf + start);
+      let wo = cx.mul(...cx.expj(-2 * Math.PI * i / n), ...o);
+      let res = cx.add(...e, ...wo);
+      cx.set(x, i + start, ...res);
+      res = cx.sub(...e, ...wo);
+      cx.set(x, i + start + nhalf, ...res);
     }
   }
 }
 module.exports = {
   fftComplexInterleaved,
-  separateComplexInterleaved,
-  cmul,
-  cadd,
-  csub,
-  cget,
-  cset
+  separateComplexInterleaved
 };
