@@ -4,9 +4,9 @@ let cx = require('./complex');
 function separateComplexInterleaved(a, start, n) {
   let nhalf = n / 2;
   let b = Array(2 * nhalf);
-  for (let i = 0; i < nhalf; i++) cx.set(b, i, ...cx.get(a, start + 2 * i + 1));
-  for (let i = 0; i < nhalf; i++) cx.set(a, start + i, ...cx.get(a, start + 2 * i));
-  for (let i = 0; i < nhalf; i++) cx.set(a, start + i + nhalf, ...cx.get(b, i));
+  for (let i = 0; i < nhalf; i++) { cx.set(b, i, ...cx.get(a, start + 2 * i + 1)); }
+  for (let i = 0; i < nhalf; i++) { cx.set(a, start + i, ...cx.get(a, start + 2 * i)); }
+  for (let i = 0; i < nhalf; i++) { cx.set(a, start + i + nhalf, ...cx.get(b, i)); }
 }
 
 function fftComplexInterleaved(x, start = 0, n = (x.length / 2)) {

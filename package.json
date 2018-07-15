@@ -4,7 +4,7 @@
   "description": "Little FFT toys",
   "main": "index.js",
   "scripts": {
-    "test": "tape test.js"
+    "test": "tape test*.js"
   },
   "keywords": [],
   "author": "Ahmed Fasih",
