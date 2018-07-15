@@ -1,17 +1,22 @@
 from cmath import exp, pi
 
 
-def separate(a):
-    b = a[1::2]
-    a[:len(a) // 2] = a[::2]
-    a[len(a) // 2:] = b[:]
-    return a
+def separate(a, start=0, n=None):
+    """In-place decimation-in-time: evens->first half, odd->second half
+
+    `start` and `n` (length) specify the view into `a`: this function will only modify the
+    `a[start:start + n]` sub-section of `a`.
+    """
+    n = n or len(a)
+    b = a[(start + 1):(start + n):2]
+    a[start:(start + n // 2)] = a[start:(start + n):2]
+    a[(start + n // 2):(start + n)] = b[:]
 
 
 def fft(a, start=0, n=None):
-    n = n or len(a)
+    n = len(a) if n == None else n
     if n > 1:
-        a[start:start + n] = separate(a[start:start + n])
+        separate(a, start, n)
         fft(a, start, n // 2)
         fft(a, start + n // 2, n // 2)
         for k in range(n // 2):
